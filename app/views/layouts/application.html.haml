@@ -1,0 +1,22 @@
+!!!
+%html
+  %head
+    %title Memonomicon
+    = csrf_meta_tags
+    = csp_meta_tag
+    = stylesheet_link_tag 'application', media: 'all'
+    = javascript_pack_tag 'application'
+
+    %script{:src => "https://cdn.jsdelivr.net/npm/jquery-sortablejs@latest/jquery-sortable.js"}
+
+
+    -#%link{:href => "https://fonts.googleapis.com/css?family=Open+Sans&display=swap", :rel => "stylesheet"}/
+
+  %body
+    - if notice
+      %p.notice
+        = notice
+    - if alert
+      %p.alert
+        = alert
+    = yield

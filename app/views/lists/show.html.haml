@@ -1,0 +1,92 @@
+#center-container
+  -##list-title-container
+  -#  %h1= @list.name
+  -#  %p= "Do: #{@list.items.count}"
+  -#  %p= "Done: #{@list.items.count}"
+
+  #list-items-container
+    #new-list-item-container
+      = form_with(model: @list.items.build, html: {:'data-type' => 'json', autocomplete: :off}, id: "new_item") do |f|
+        = f.text_field :name, placeholder: 'add a task'
+        = f.hidden_field :list_id, value: @list.id
+
+    #persisted-list-items-container
+      - @list.items.persisted.order(created_at: :desc).each do |item|
+        = form_with(model: item, html: {:'data-type' => 'json', class: 'item-form', autocomplete: :off}) do |f|
+          .list-item-container
+            .list-item-name
+              = f.text_field :name, class: "list-item-name-field"
+            .list-item-status
+              %label.container
+                = f.check_box :completed
+                %span.checkmark
+            .list-item-delete
+              -#= link_to item, method: :delete, data: { confirm: 'Are you sure?' }, :remote => true, :class => 'delete-item-link' do
+              = link_to item, method: :delete, remote: true, :class => 'delete-item-link' do
+                = image_tag('trash-light.svg')
+            .list-item-move
+              = image_tag('mover-light.svg')
+
+            .list-item-description.hidden
+              = f.text_area :description, placeholder: "describe your task"
+
+:javascript
+    $(document).ready(function() {
+      debugger
+
+      function submitForm(form){
+        let put_url = $(form).attr("action"); //get form action url
+        let request_method = 'PUT';
+        let form_data = $(form).serialize(); //Encode form elements for submission
+
+        $.ajax({
+          url : put_url,
+          type: request_method,
+          data : form_data,
+          dataType : 'json'
+        }).done(function(response){
+          // noop
+        });
+      }
+
+      window.timeout=null;
+
+      $('textarea, input[type="text"]').on('change', function(event){
+        // if (event.key != "Alt") {
+        let form = $(event.target).parents('form');
+        clearTimeout(window.timeout);
+        window.timeout = setTimeout(submitForm, 1000, form); // waits 1 second for user to press a new key
+        // }
+      });
+
+      $('input[type="checkbox"]').change(function(event) {
+          let form = $(event.target).parents('form');
+          submitForm(form)
+      });
+
+      $('textarea').autoResize();
+
+      $(".list-item-name-field").click(function(event){
+        $(event.target.parentElement.parentElement).toggleClass('expanded');
+        $(event.target.parentElement.parentElement).find('.list-item-description').toggleClass("hidden");
+      });
+
+      $('#new_item').on('ajax:success', function(event){
+        [data, status, xhr] = event.detail;
+        $("#item_name").val("");
+        $("#item_description").val("");
+        $("#persisted-list-items-container").prepend(data);
+
+        $($("#persisted-list-items-container").children()[0]).find('textarea').autoResize();
+        $($("#persisted-list-items-container").children()[0]).find(".list-item-name-field").click(function(event){
+          $(event.target.parentElement.parentElement).toggleClass('expanded');
+          $(event.target.parentElement.parentElement).find('.list-item-description').toggleClass("hidden");
+        });
+        $($("#persisted-list-items-container").children()[0]).find('textarea').on('keyup', function(event){
+          let form = $(event.target).parents('form');
+          clearTimeout(window.timeout);
+          window.timeout = setTimeout(submitForm(form), 1000); // waits 1 second for user to press a new key
+        });
+      }).on('ajax:error', function(event){
+      });
+    });

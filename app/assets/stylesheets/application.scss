@@ -1,0 +1,144 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+html, * {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 16px;
+}
+
+#center-container {
+  width: 600px;
+  margin: 60px auto 0;
+
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+  }
+}
+
+//#list-title-container {
+//  display: block;
+//  float: left;
+//}
+
+.hidden {
+  display: none;
+}
+
+#list-items-container {
+  //display: block;
+  //float: right;
+
+  margin-bottom: 80px;
+
+  #new-list-item-container {
+    padding: 8px 20px;
+    margin-bottom: 30px;
+
+    //-webkit-box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+    //box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+
+    border-bottom: 3px solid #4285F4;
+
+    input {
+      width: 100%;
+      border: 0;
+      //font-style: italic;
+
+      &::placeholder {
+        font-style: italic;
+      }
+    }
+
+    input:focus, textarea:focus {
+      border: 0;
+      outline: 0;
+    }
+  }
+
+  .list-item-container {
+    border-bottom: 1px solid lightgrey;
+    display: grid;
+    grid-template-columns: 450px 50px 50px 50px;
+    grid-template-areas:
+      "name status delete move"
+      "description description description description";
+    grid-gap: 0;
+
+    .list-item-status {
+      grid-area: status;
+      display: inline-block;
+      padding: 20px;
+    }
+
+    .list-item-name {
+      grid-area: name;
+      cursor: text;
+
+      input {
+        padding: 20px;
+        border: 0;
+        outline: 0;
+        width: 100%;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .list-item-delete, .list-item-move {
+      margin: auto;
+
+      img {
+        height: 24px;
+      }
+    }
+
+    .list-item-delete {
+      grid-area: delete;
+      cursor: pointer;
+    }
+
+    .list-item-move {
+      grid-area: move;
+      cursor: grab;
+    }
+
+    .list-item-description {
+      grid-area: description;
+      padding: 20px;
+      border-top: 1px solid lightgrey;
+      background-color: #f7f7f7;
+
+      textarea {
+        width: 97%;
+        font-size: 14px;
+        padding: 7px;
+        border: 0;
+        outline: 0;
+        background-color: #f7f7f7;
+
+        &::placeholder {
+          font-style: italic;
+        }
+      }
+    }
+
+  }
+
+  #persisted-list-items-container {
+    -webkit-box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.15);
+  }
+}
