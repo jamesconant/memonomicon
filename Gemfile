@@ -57,3 +57,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'haml-rails', '~> 2.0', '>= 2.0.1'
 gem 'devise', '~> 4.7'
+gem 'paranoia', '~> 2.4', '>= 2.4.2'
+
+gem 'jquery-ui-rails', '~> 5.0', '>= 5.0.5'
+gem 'acts_as_list'
